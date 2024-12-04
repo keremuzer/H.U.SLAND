@@ -14,12 +14,16 @@ ShaperTree::~ShaperTree()
 void ShaperTree::initializeTree(std::vector<RealmShaper *> shapers)
 {
     // TODO: Insert innitial shapers to the tree
+    for (RealmShaper *shaper : shapers)
+    {
+        insert(shaper);
+    }
 }
 
 int ShaperTree::getSize()
 {
     // TODO: Return number of shapers in the tree
-    return 0;
+    return realmShapers.size();
 }
 
 std::vector<RealmShaper *> ShaperTree::getTree()
@@ -39,6 +43,25 @@ bool ShaperTree::isValidIndex(int index)
 void ShaperTree::insert(RealmShaper *shaper)
 {
     // TODO: Insert shaper to the tree
+    if (realmShapers.size() == 0)
+    {
+        realmShapers.push_back(shaper);
+        return;
+    }
+    int index = 0;
+    while (index < realmShapers.size())
+    {
+        if (realmShapers[index]->getHonour() < shaper->getHonour())
+        {
+            index = 2 * index + 2;
+        }
+        else
+        {
+            index = 2 * index + 1;
+        }
+    }
+    realmShapers.resize(index + 1, nullptr);
+    realmShapers.insert(realmShapers.begin() + index, shaper);
 }
 
 int ShaperTree::remove(RealmShaper *shaper)
