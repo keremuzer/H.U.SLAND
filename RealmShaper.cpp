@@ -58,7 +58,16 @@ std::vector<RealmShaper *> RealmShaper::readFromFile(const std::string &filename
     // add them to vector
     // return the vector
     // Input format: playerName[tab]honourPoints
-
+    std::ifstream file(filename);
+    std::string line;
+    while (std::getline(file, line))
+    {
+        std::istringstream iss(line);
+        std::string name;
+        int honour;
+        iss >> name >> honour;
+        players.push_back(new RealmShaper(name, honour));
+    }
     return players;
 }
 

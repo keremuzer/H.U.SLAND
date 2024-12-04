@@ -4,7 +4,7 @@ Isle::Isle(std::string name) : name(name)
 {
 }
 
-const std::string& Isle::getName() const
+const std::string &Isle::getName() const
 {
     return this->name;
 }
@@ -69,7 +69,12 @@ std::vector<Isle *> Isle::readFromFile(const std::string &filename)
     // add them to vector
     // return the vector
     // Input format: isleName
-
+    std::ifstream file(filename);
+    std::string line;
+    while (std::getline(file, line))
+    {
+        isles.push_back(new Isle(line));
+    }
     return isles;
 }
 
