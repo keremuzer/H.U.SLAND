@@ -71,9 +71,12 @@ std::vector<Isle *> Isle::readFromFile(const std::string &filename)
     // Input format: isleName
     std::ifstream file(filename);
     std::string line;
+    Isle *temp;
     while (std::getline(file, line))
     {
-        isles.push_back(new Isle(line));
+        temp = new Isle(line);
+        isles.push_back(temp);
+        delete temp;
     }
     return isles;
 }

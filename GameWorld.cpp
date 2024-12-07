@@ -8,11 +8,11 @@ void GameWorld::initializeGame(std::vector<Isle *> places, std::vector<RealmShap
     mapTree.initializeMap(places);
 }
 
-Map& GameWorld::getMapTree()
+Map &GameWorld::getMapTree()
 {
     return mapTree;
 }
-ShaperTree& GameWorld::getShaperTree()
+ShaperTree &GameWorld::getShaperTree()
 {
     return shaperTree;
 }
@@ -35,9 +35,9 @@ void GameWorld::exploreArea(RealmShaper *realmShaper, Isle *isle)
     // Check if realmShaper has access
     // Use // std::cout << "[Explore Area] " << realmShaper->getName() << " does not have access to explore area " << *isle << std::endl;
     // If realmShaper has access
-    // Visit isle, 
-    // collect item, 
-    // check overcrowding for Isle, 
+    // Visit isle,
+    // collect item,
+    // check overcrowding for Isle,
     // delete Isle if necessary
 
     // Use // std::cout << "[Explore Area] " << realmShaper->getName() << " visited " << isle->getName() << std::endl;
@@ -51,7 +51,8 @@ void GameWorld::exploreArea(RealmShaper *realmShaper, Isle *isle)
     // to RealmShaper or Isle or other classes depending on your implementation
 }
 
-void GameWorld::craft(RealmShaper *shaper, const std::string &isleName){
+void GameWorld::craft(RealmShaper *shaper, const std::string &isleName)
+{
     // TODO: Check energy and craft new isle if possible
     // Use std::cout << "[Energy] " << shaperName << " has enough energy points: " << shaperEnergyLevel << std::endl;
     // Use std::cout << "[Craft] " << shaperName << " crafted new Isle " << isleName << std::endl;
@@ -60,8 +61,8 @@ void GameWorld::craft(RealmShaper *shaper, const std::string &isleName){
 
 void GameWorld::displayGameState()
 {
-    mapTree.displayMap();
-    shaperTree.displayTree();
+    // mapTree.displayMap();
+    // shaperTree.displayTree();
 }
 
 // TODO: Implement functions to read and parse Access and Duel logs

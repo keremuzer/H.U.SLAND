@@ -1,0 +1,25 @@
+{ 
+    "version": "0.2.0",
+    "configurations": [
+    {
+    "name": "WSL Debug",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${workspaceFolder}/bin/HUSLAND",
+    "args": ["io/initial_world.txt", "io/initial_realm_shapers.txt", "io/access.log", "io/duels.log", "io/current_isles.txt", "io/current_map.txt", "io/current_realm_shapers.txt", "io/current_shaper_tree.txt"],
+    "stopAtEntry": false,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "miDebuggerPath": "/usr/bin/gdb",
+    "setupCommands": [
+    {
+    "description": "Enable pretty-printing for gdb",
+    "text": "-enable-pretty-printing",
+    "ignoreFailures": true
+    }
+    ]
+    }
+    ]
+}

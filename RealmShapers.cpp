@@ -9,6 +9,11 @@ ShaperTree::ShaperTree()
 ShaperTree::~ShaperTree()
 {
     // TODO: Free any dynamically allocated memory if necessary
+    for (RealmShaper *shaper : realmShapers)
+    {
+        delete shaper;
+    }
+    realmShapers.clear();
 }
 
 void ShaperTree::initializeTree(std::vector<RealmShaper *> shapers)
@@ -36,6 +41,10 @@ bool ShaperTree::isValidIndex(int index)
     bool isValid = false;
 
     // TODO: Check if the index is valin in the tree
+    if (index >= 0 && index < int(realmShapers.size()))
+    {
+        isValid = true;
+    }
 
     return isValid;
 }
@@ -43,25 +52,19 @@ bool ShaperTree::isValidIndex(int index)
 void ShaperTree::insert(RealmShaper *shaper)
 {
     // TODO: Insert shaper to the tree
-    if (realmShapers.size() == 0)
+    realmShapers.push_back(shaper);
+    /*realmShapers.push_back(nullptr);
+    size_t index = 0;
+    while (realmShapers[index] != nullptr && shaper->getHonour() <= realmShapers[index]->getHonour())
     {
-        realmShapers.push_back(shaper);
-        return;
+        index++;
     }
-    int index = 0;
-    while (index < realmShapers.size())
-    {
-        if (realmShapers[index]->getHonour() < shaper->getHonour())
-        {
-            index = 2 * index + 2;
-        }
-        else
-        {
-            index = 2 * index + 1;
-        }
-    }
-    realmShapers.resize(index + 1, nullptr);
+
     realmShapers.insert(realmShapers.begin() + index, shaper);
+    if (realmShapers.back() == nullptr)
+    {
+        realmShapers.pop_back();
+    }*/
 }
 
 int ShaperTree::remove(RealmShaper *shaper)
@@ -70,6 +73,14 @@ int ShaperTree::remove(RealmShaper *shaper)
     // Make sure tree protects its form (complate binary tree) after deletion of a node
     // return index if found and removed
     // else
+    for (size_t i = 0; i < realmShapers.size(); i++)
+    {
+        if (realmShapers[i] == shaper)
+        {
+            realmShapers.erase(realmShapers.begin() + i);
+            return i;
+        }
+    }
     return -1;
 }
 
@@ -101,6 +112,7 @@ RealmShaper ShaperTree::duel(RealmShaper *challenger, bool result)
     // Use   std::cout << challengerName << "-" << challengerHonour << " ";
     // Use   std::cout << opponentName << "-" << opponentHonour << std::endl;
     // Use   std::cout << "[Duel] " << loserName << " lost all honour, delete" << std::endl;
+    return *challenger;
 }
 
 RealmShaper *ShaperTree::getParent(RealmShaper *shaper)
@@ -207,8 +219,10 @@ void ShaperTree::printTree(int index, int level, const std::string &prefix)
         return;
 
     std::cout << prefix << (level > 0 ? "   └---- " : "") << *realmShapers[index] << std::endl;
-    int left = 0;  // TODO: Calculate left index
-    int right = 0; // TODO: Calculate right index
+    // TODO: Calculate left index
+    int left = 2 * index + 1;
+    // TODO: Calculate right index
+    int right = 2 * index + 2;
 
     if (isValidIndex(left) || isValidIndex(right))
     {
