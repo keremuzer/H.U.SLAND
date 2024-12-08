@@ -41,11 +41,7 @@ bool ShaperTree::isValidIndex(int index)
     bool isValid = false;
 
     // TODO: Check if the index is valin in the tree
-    if (index >= 0 && index < int(realmShapers.size()))
-    {
-        isValid = true;
-    }
-
+    isValid = index >= 0 && index < int(realmShapers.size()) && realmShapers[index] != nullptr;
     return isValid;
 }
 
@@ -53,17 +49,12 @@ void ShaperTree::insert(RealmShaper *shaper)
 {
     // TODO: Insert shaper to the tree
     realmShapers.push_back(shaper);
-    /*realmShapers.push_back(nullptr);
-    size_t index = 0;
-    while (realmShapers[index] != nullptr && shaper->getHonour() <= realmShapers[index]->getHonour())
+    /*for (size_t i = realmShapers.size() - 1; i > 0; i--)
     {
-        index++;
-    }
-
-    realmShapers.insert(realmShapers.begin() + index, shaper);
-    if (realmShapers.back() == nullptr)
-    {
-        realmShapers.pop_back();
+        if (realmShapers[i]->getHonour() > realmShapers[i - 1]->getHonour())
+        {
+            replace(realmShapers[i], realmShapers[i - 1]);
+        }
     }*/
 }
 
@@ -88,6 +79,13 @@ int ShaperTree::findIndex(RealmShaper *shaper)
 {
     // return index in the tree if found
     // else
+    for (size_t i = 0; i < realmShapers.size(); i++)
+    {
+        if (realmShapers[i] == shaper)
+        {
+            return i;
+        }
+    }
     return -1;
 }
 
@@ -95,13 +93,18 @@ int ShaperTree::getDepth(RealmShaper *shaper)
 {
     // return depth of the node in the tree if found
     // else
+    int index = findIndex(shaper);
+    if (index != -1)
+    {
+        return int(log2(index + 1));
+    }
     return -1;
 }
 
 int ShaperTree::getDepth()
 {
     // return total|max depth|height of the tree
-    return 0;
+    return getDepth(realmShapers.back());
 }
 
 RealmShaper ShaperTree::duel(RealmShaper *challenger, bool result)
@@ -120,13 +123,15 @@ RealmShaper *ShaperTree::getParent(RealmShaper *shaper)
     RealmShaper *parent = nullptr;
 
     // TODO: return parent of the shaper
-
+    parent = realmShapers[(findIndex(shaper) - 1) / 2];
     return parent;
 }
 
 void ShaperTree::replace(RealmShaper *player_low, RealmShaper *player_high)
 {
     // TODO: Change player_low and player_high's positions on the tree
+    realmShapers[findIndex(player_low)] = player_high;
+    realmShapers[findIndex(player_high)] = player_low;
 }
 
 RealmShaper *ShaperTree::findPlayer(RealmShaper shaper)
@@ -136,7 +141,11 @@ RealmShaper *ShaperTree::findPlayer(RealmShaper shaper)
     // TODO: Search shaper by object
     // Return the shaper if found
     // Return nullptr if shaper not found
-
+    int index = findIndex(&shaper);
+    if (index != -1)
+    {
+        foundShaper = realmShapers[index];
+    }
     return foundShaper;
 }
 
@@ -148,7 +157,14 @@ RealmShaper *ShaperTree::findPlayer(std::string name)
     // TODO: Search shaper by name
     // Return the shaper if found
     // Return nullptr if shaper not found
-
+    for (RealmShaper *shaper : realmShapers)
+    {
+        if (shaper->getName() == name)
+        {
+            foundShaper = shaper;
+            break;
+        }
+    }
     return foundShaper;
 }
 
@@ -165,6 +181,19 @@ std::vector<std::string> ShaperTree::inOrderTraversal(int index)
     // in-order traversal will not give rankings in correct order
     // for correct order you need to implement level-order traversal
     // still you are to implement this function as well
+    if (!isValidIndex(index))
+    {
+        return result;
+    }
+
+    std::vector<std::string> left = inOrderTraversal(2 * index + 1);
+    result.insert(result.end(), left.begin(), left.end());
+
+    result.push_back(realmShapers[index]->getName());
+
+    std::vector<std::string> right = inOrderTraversal(2 * index + 2);
+    result.insert(result.end(), right.begin(), right.end());
+
     return result;
 }
 
@@ -176,6 +205,19 @@ std::vector<std::string> ShaperTree::preOrderTraversal(int index)
     // Return the vector
 
     // Define and implement as many helper functions as necessary for recursive implementation
+    if (!isValidIndex(index))
+    {
+        return result;
+    }
+
+    result.push_back(realmShapers[index]->getName());
+
+    std::vector<std::string> left = preOrderTraversal(2 * index + 1);
+    result.insert(result.end(), left.begin(), left.end());
+
+    std::vector<std::string> right = preOrderTraversal(2 * index + 2);
+    result.insert(result.end(), right.begin(), right.end());
+
     return result;
 }
 
@@ -187,6 +229,19 @@ std::vector<std::string> ShaperTree::postOrderTraversal(int index)
     // Return the vector
 
     // Define and implement as many helper functions as necessary for recursive implementation
+    if (!isValidIndex(index))
+    {
+        return result;
+    }
+
+    std::vector<std::string> left = postOrderTraversal(2 * index + 1);
+    result.insert(result.end(), left.begin(), left.end());
+
+    std::vector<std::string> right = postOrderTraversal(2 * index + 2);
+    result.insert(result.end(), right.begin(), right.end());
+
+    result.push_back(realmShapers[index]->getName());
+
     return result;
 }
 
@@ -196,6 +251,11 @@ void ShaperTree::preOrderTraversal(int index, std::ofstream &outFile)
     // write nodes to output file
 
     // Define and implement as many helper functions as necessary for recursive implementation
+    std::vector<std::string> result = preOrderTraversal(index);
+    for (std::string name : result)
+    {
+        outFile << name << std::endl;
+    }
 }
 
 void ShaperTree::breadthFirstTraversal(std::ofstream &outFile)
@@ -204,6 +264,10 @@ void ShaperTree::breadthFirstTraversal(std::ofstream &outFile)
     // write nodes to output file
 
     // Define and implement as many helper functions as necessary
+    for (RealmShaper *shaper : realmShapers)
+    {
+        outFile << shaper->getName() << std::endl;
+    }
 }
 
 void ShaperTree::displayTree()
@@ -235,10 +299,16 @@ void ShaperTree::writeShapersToFile(const std::string &filename)
 {
     // TODO: Write the shapers to filename output level by level
     // Use std::cout << "[Output] " << "Shapers have been written to " << filename << " according to rankings." << std::endl;
+    std::cout << "[Output] " << "Shapers have been written to " << filename << " according to rankings." << std::endl;
+    std::ofstream file(filename);
+    breadthFirstTraversal(file);
 }
 
 void ShaperTree::writeToFile(const std::string &filename)
 {
     // TODO: Write the tree to filename output pre-order
     // Use std::cout << "[Output] " << "Tree have been written to " << filename << " in pre-order." << std::endl;
+    std::cout << "[Output] " << "Tree have been written to " << filename << " in pre-order." << std::endl;
+    std::ofstream file(filename);
+    preOrderTraversal(0, file);
 }
