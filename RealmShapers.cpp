@@ -48,14 +48,17 @@ bool ShaperTree::isValidIndex(int index)
 void ShaperTree::insert(RealmShaper *shaper)
 {
     // TODO: Insert shaper to the tree
+    // find the correct position for the new shaper
     realmShapers.push_back(shaper);
-    /*for (size_t i = realmShapers.size() - 1; i > 0; i--)
+    /*int index;
+    for (index = 0; index < int(realmShapers.size()); index++)
     {
-        if (realmShapers[i]->getHonour() > realmShapers[i - 1]->getHonour())
+        if (realmShapers[index]->getHonour() < shaper->getHonour())
         {
-            replace(realmShapers[i], realmShapers[i - 1]);
+            break;
         }
-    }*/
+    }
+    realmShapers.insert(realmShapers.begin() + index, shaper);*/
 }
 
 int ShaperTree::remove(RealmShaper *shaper)
@@ -115,6 +118,32 @@ RealmShaper ShaperTree::duel(RealmShaper *challenger, bool result)
     // Use   std::cout << challengerName << "-" << challengerHonour << " ";
     // Use   std::cout << opponentName << "-" << opponentHonour << std::endl;
     // Use   std::cout << "[Duel] " << loserName << " lost all honour, delete" << std::endl;
+    RealmShaper *opponent = getParent(challenger);
+    if (result)
+    {
+        challenger->gainHonour();
+        opponent->loseHonour();
+        replace(challenger, opponent);
+        std::cout << "[Duel] " << challenger->getName() << " won the duel" << std::endl;
+    }
+    else
+    {
+        challenger->loseHonour();
+        opponent->gainHonour();
+    }
+    std::cout << "[Honour] " << "New honour points: ";
+    std::cout << challenger->getName() << "-" << challenger->getHonour() << std::endl;
+    std::cout << opponent->getName() << "-" << opponent->getHonour() << std::endl;
+    if (challenger->getHonour() <= 0)
+    {
+        std::cout << "[Duel] " << challenger->getName() << " lost all honour, delete" << std::endl;
+        remove(challenger);
+    }
+    else if (opponent->getHonour() <= 0)
+    {
+        std::cout << "[Duel] " << opponent->getName() << " lost all honour, delete" << std::endl;
+        remove(opponent);
+    }
     return *challenger;
 }
 
@@ -130,8 +159,12 @@ RealmShaper *ShaperTree::getParent(RealmShaper *shaper)
 void ShaperTree::replace(RealmShaper *player_low, RealmShaper *player_high)
 {
     // TODO: Change player_low and player_high's positions on the tree
-    realmShapers[findIndex(player_low)] = player_high;
-    realmShapers[findIndex(player_high)] = player_low;
+    int index_low = findIndex(player_low);
+    int index_high = findIndex(player_high);
+    if (index_low != -1 && index_high != -1)
+    {
+        std::swap(realmShapers[index_low], realmShapers[index_high]);
+    }
 }
 
 RealmShaper *ShaperTree::findPlayer(RealmShaper shaper)

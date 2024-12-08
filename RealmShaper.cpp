@@ -74,7 +74,7 @@ std::vector<RealmShaper *> RealmShaper::readFromFile(const std::string &filename
 bool RealmShaper::operator==(const RealmShaper &other) const
 {
     // TODO: Compare by name, return true if same
-    return false;
+    return this->name == other.name;
 }
 
 std::ostream &operator<<(std::ostream &os, const RealmShaper &p)
