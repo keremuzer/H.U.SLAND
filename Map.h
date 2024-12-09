@@ -13,7 +13,7 @@ struct MapNode
 {
     Isle *isle;
     MapNode *left, *right;
-    int height = 1;
+    int height = 0;
 
     MapNode(Isle *isle) : isle(isle), left(nullptr), right(nullptr), height(1) {}
     ~MapNode()
@@ -65,11 +65,10 @@ public:
     void initializeMap(std::vector<Isle *> isles);
 
     MapNode *findFirstEmptyIsle(MapNode *node);
-    
 
-    int getDepth(MapNode *node); // Determines the depth of a node within the tree.
+    int getDepth(MapNode *node);  // Determines the depth of a node within the tree.
     int getIsleDepth(Isle *isle); // Determines the depth of a isle within the tree.
-    int getDepth(); // Total level of the tree
+    int getDepth();               // Total level of the tree
 
     // Display tree in terminal
     void display(MapNode *current, int depth, int state);
@@ -78,7 +77,6 @@ public:
     // Item drop api
     void populateWithItems();
     void dropItemBFS();
-
 
     // Write the AVL tree to a file with levels
     void writeToFile(const std::string &filename);

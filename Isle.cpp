@@ -46,7 +46,7 @@ bool Isle::decreaseShaperCount()
 bool Isle::operator==(const Isle &other) const
 {
     // TODO: Compare by name, return true if same
-    return false;
+    return other.name == this->name;
 }
 
 bool Isle::operator<(const Isle &other) const
@@ -76,7 +76,6 @@ std::vector<Isle *> Isle::readFromFile(const std::string &filename)
     {
         temp = new Isle(line);
         isles.push_back(temp);
-        delete temp;
     }
     return isles;
 }

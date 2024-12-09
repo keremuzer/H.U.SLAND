@@ -23,6 +23,7 @@ private:
   const int capacity = 10; // If more realm shapers than this capacity gathers at this isle, it self-destructs and must be deleted from the map
   int shaperCount = 0;     // Number of realm shapers that exist in the Isle at the same time
   Item item = EMPTY;       // Possible item Isle holds
+  std::vector<Isle *> *islesVector;
 
 public:
   // Constructor decleration

@@ -29,8 +29,7 @@ int main(int argc, char **argv)
     std::vector<RealmShaper *> players = RealmShaper::readFromFile(playersFile);
     GameWorld gameWorld = GameWorld();
     gameWorld.initializeGame(places, players);
-    gameWorld.getShaperTree().displayTree();
-
+    // gameWorld.getShaperTree().displayTree();
     gameWorld.displayGameState();
     gameWorld.processGameEvents(argv[3], argv[4]);
     gameWorld.saveGameState(argv[5], argv[6], argv[7], argv[8]);
