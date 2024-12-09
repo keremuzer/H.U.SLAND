@@ -52,13 +52,13 @@ bool Isle::operator==(const Isle &other) const
 bool Isle::operator<(const Isle &other) const
 {
     // TODO: Compare by name
-    return false;
+    return this->name < other.name;
 }
 
 bool Isle::operator>(const Isle &other) const
 {
     // TODO: Compare by name
-    return false;
+    return this->name > other.name;
 }
 
 // Implementation of readFromFile

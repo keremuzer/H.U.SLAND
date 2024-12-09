@@ -153,6 +153,71 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
     // Will be called if there is overcrowding
     // returns node
     // Use std::cout << "[Remove] " << "Tree is Empty" << std::endl;
+    if (node == nullptr)
+    {
+        std::cout << "[Remove] " << "Tree is Empty" << std::endl;
+        return node;
+    }
+    if (isle->getName() < node->isle->getName())
+    {
+        node->left = remove(node->left, isle);
+    }
+    else if (isle->getName() > node->isle->getName())
+    {
+        node->right = remove(node->right, isle);
+    }
+    else
+    {
+        if (node->left == nullptr && node->right == nullptr)
+        {
+            delete node;
+            return nullptr;
+        }
+
+        if (node->left == nullptr)
+        {
+            MapNode *temp = node->right;
+            delete node;
+            return temp;
+        }
+        else if (node->right == nullptr)
+        {
+            MapNode *temp = node->left;
+            delete node;
+            return temp;
+        }
+
+        MapNode *temp = node->right;
+        while (temp->left != nullptr)
+        {
+            temp = temp->left;
+        }
+
+        node->isle = temp->isle;
+        node->right = remove(node->right, temp->isle);
+    }
+
+    node->height = 1 + std::max(height(node->left), height(node->right));
+    int balance = height(node->left) - height(node->right);
+
+    if (balance > 1 && height(node->left->left) - height(node->left->right) >= 0)
+    {
+        return rotateRight(node);
+    }
+    if (balance > 1 && height(node->left->left) - height(node->left->right) < 0)
+    {
+        node->left = rotateLeft(node->left);
+        return rotateRight(node);
+    }
+    if (balance < -1 && height(node->right->left) - height(node->right->right) <= 0)
+    {
+        return rotateLeft(node);
+    }
+    if (balance < -1 && height(node->right->left) - height(node->right->right) > 0)
+    {
+        node->right = rotateRight(node->right);
+        return rotateLeft(node);
+    }
 
     return node;
 }
@@ -262,6 +327,26 @@ void Map::populateWithItems()
 Isle *Map::findIsle(Isle isle)
 {
     // TODO: Find isle by value
+    MapNode *current = root;
+    std::queue<MapNode *> q;
+    q.push(current);
+    while (!q.empty())
+    {
+        current = q.front();
+        q.pop();
+        if (current->left != nullptr)
+        {
+            q.push(current->left);
+        }
+        if (current->right != nullptr)
+        {
+            q.push(current->right);
+        }
+        if (current->isle->getName() == isle.getName())
+        {
+            return current->isle;
+        }
+    }
     return nullptr;
 }
 
@@ -294,6 +379,26 @@ Isle *Map::findIsle(std::string name)
 MapNode *Map::findNode(Isle isle)
 {
     // TODO: Find node by value
+    MapNode *current = root;
+    std::queue<MapNode *> q;
+    q.push(current);
+    while (!q.empty())
+    {
+        current = q.front();
+        q.pop();
+        if (current->left != nullptr)
+        {
+            q.push(current->left);
+        }
+        if (current->right != nullptr)
+        {
+            q.push(current->right);
+        }
+        if (current->isle->getName() == isle.getName())
+        {
+            return current;
+        }
+    }
     return nullptr;
 }
 
