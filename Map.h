@@ -84,7 +84,7 @@ public:
     void writeIslesToFile(const std::string &filename);
     std::vector<Isle *> inOrderTraversal(MapNode *current);
 
-    int rebalanceCount = 0;
+    int rebalanceCount = 1;
 };
 
 #endif

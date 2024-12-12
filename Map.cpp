@@ -154,9 +154,20 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
     // Use std::cout << "[Remove] " << "Tree is Empty" << std::endl;
     if (node == nullptr)
     {
-        std::cout << "[Remove] " << "Tree is Empty" << std::endl;
+        std::cerr << "[Remove] Error: Tree is Empty or Node not found." << std::endl;
         return node;
     }
+
+    if (node->isle == nullptr)
+    {
+        return nullptr;
+    }
+
+    if (isle == nullptr)
+    {
+        return node;
+    }
+
     if (isle->getName() < node->isle->getName())
     {
         node->left = remove(node->left, isle);
@@ -167,42 +178,43 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
     }
     else
     {
-        if (node->left == nullptr && node->right == nullptr)
+        if (node->left == nullptr || node->right == nullptr)
         {
-            delete node->isle;
-            delete node;
-            return nullptr;
+            MapNode *temp = node->left ? node->left : node->right;
+            if (temp == nullptr)
+            {
+                temp = node;
+                delete temp->isle;
+                node = nullptr;
+            }
+            else
+            {
+                *node = *temp;
+            }
+            delete temp;
+            temp = nullptr;
         }
-
-        if (node->left == nullptr)
-        {
-            MapNode *temp = node->right;
-            delete node->isle;
-            delete node;
-            return temp;
-        }
-        else if (node->right == nullptr)
+        else
         {
             MapNode *temp = node->left;
+            while (temp->right != nullptr)
+            {
+                temp = temp->right;
+            }
             delete node->isle;
-            delete node;
-            return temp;
+            node->isle = temp->isle;
+            temp->isle = nullptr;
+            node->left = remove(node->left, node->isle);
         }
-
-        MapNode *temp = node->left;
-        while (temp->right != nullptr)
-        {
-            temp = temp->right;
-        }
-
-        delete node->isle;
-        node->isle = temp->isle;
-        node->left = remove(node->left, temp->isle);
     }
 
+    if (node == nullptr)
+    {
+        return node;
+    }
     node->height = 1 + std::max(height(node->left), height(node->right));
-    int balance = height(node->left) - height(node->right);
 
+    int balance = height(node->left) - height(node->right);
     if (balance > 1 && height(node->left->left) - height(node->left->right) >= 0)
     {
         rebalanceCount++;
@@ -216,6 +228,7 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
         node->left = rotateLeft(node->left);
         return rotateRight(node);
     }
+
     if (balance < -1 && height(node->right->left) - height(node->right->right) <= 0)
     {
         rebalanceCount++;
@@ -237,8 +250,10 @@ void Map::remove(Isle *isle)
 {
     if (root == nullptr)
     {
+        std::cerr << "[Remove] Error: Tree is empty." << std::endl;
         return;
     }
+    std::cerr << "[Remove] Starting removal for Isle: " << isle->getName() << std::endl;
     root = remove(root, isle);
     // you might need to insert some checks / functions here depending on your implementation
 }
@@ -266,19 +281,18 @@ void Map::postOrderItemDrop(MapNode *current, int &count)
 {
     // TODO: Drop GOLDIUM according to rules
     // Use  std::cout << "[Item Drop] " << "GOLDIUM dropped on Isle: " << current->isle->getName() << std::endl;
-
     if (current == nullptr)
     {
         return;
     }
+    postOrderItemDrop(current->left, count);
+    postOrderItemDrop(current->right, count);
     if (count % 3 == 0)
     {
         std::cout << "[Item Drop] " << "GOLDIUM dropped on Isle: " << current->isle->getName() << std::endl;
         current->isle->setItem(GOLDIUM);
     }
     count++;
-    postOrderItemDrop(current->left, count);
-    postOrderItemDrop(current->right, count);
 }
 
 MapNode *Map::findFirstEmptyIsle(MapNode *node)
@@ -392,9 +406,9 @@ void Map::populateWithItems()
 {
     // TODO: Distribute fist GOLDIUM than EINSTEINIUM
 
-    int count = 0;
+    int count = 1;
     postOrderItemDrop(root, count);
-    count = 0;
+    count = 1;
     preOrderItemDrop(root, count);
 }
 

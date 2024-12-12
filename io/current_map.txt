@@ -1,5 +1,4 @@
-Maplegrove 
-Dawnpeak Stoneshire 
-Coloris Elderpond Orisca Tenea 
-Argenmomble Couryonne Levannet Navalicia Steepgulch Tarbella Windvein 
-Barcergos 
+Levannet 
+Coloris Stoneshire 
+Argenmomble Dawnpeak Orisca Tenea 
+Barcergos Couryonne Navalicia Steepgulch Tarbella Windvein 
