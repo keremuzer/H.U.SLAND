@@ -11,7 +11,10 @@ ShaperTree::~ShaperTree()
     // TODO: Free any dynamically allocated memory if necessary
     for (RealmShaper *shaper : realmShapers)
     {
-        delete shaper;
+        if (shaper)
+        {
+            delete shaper;
+        }
     }
     realmShapers.clear();
 }

@@ -1,4 +1,5 @@
 #include "Map.h"
+#include <stack>
 
 Map::Map()
 {
@@ -22,6 +23,7 @@ Map::~Map()
         {
             q.push(current->right);
         }
+        delete current->isle;
         delete current;
     }
     root = nullptr;
@@ -35,10 +37,7 @@ void Map::initializeMap(std::vector<Isle *> isles)
     {
         this->insert(isle);
     }
-    for (Isle *isle : isles)
-    {
-        delete isle;
-    }
+    populateWithItems();
 }
 
 MapNode *Map::rotateRight(MapNode *current)
@@ -170,6 +169,7 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
     {
         if (node->left == nullptr && node->right == nullptr)
         {
+            delete node->isle;
             delete node;
             return nullptr;
         }
@@ -177,24 +177,27 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
         if (node->left == nullptr)
         {
             MapNode *temp = node->right;
+            delete node->isle;
             delete node;
             return temp;
         }
         else if (node->right == nullptr)
         {
             MapNode *temp = node->left;
+            delete node->isle;
             delete node;
             return temp;
         }
 
-        MapNode *temp = node->right;
-        while (temp->left != nullptr)
+        MapNode *temp = node->left;
+        while (temp->right != nullptr)
         {
-            temp = temp->left;
+            temp = temp->right;
         }
 
+        delete node->isle;
         node->isle = temp->isle;
-        node->right = remove(node->right, temp->isle);
+        node->left = remove(node->left, temp->isle);
     }
 
     node->height = 1 + std::max(height(node->left), height(node->right));
@@ -202,19 +205,27 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
 
     if (balance > 1 && height(node->left->left) - height(node->left->right) >= 0)
     {
+        rebalanceCount++;
+        dropItemBFS();
         return rotateRight(node);
     }
     if (balance > 1 && height(node->left->left) - height(node->left->right) < 0)
     {
+        rebalanceCount++;
+        dropItemBFS();
         node->left = rotateLeft(node->left);
         return rotateRight(node);
     }
     if (balance < -1 && height(node->right->left) - height(node->right->right) <= 0)
     {
+        rebalanceCount++;
+        dropItemBFS();
         return rotateLeft(node);
     }
     if (balance < -1 && height(node->right->left) - height(node->right->right) > 0)
     {
+        rebalanceCount++;
+        dropItemBFS();
         node->right = rotateRight(node->right);
         return rotateLeft(node);
     }
@@ -224,7 +235,11 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
 
 void Map::remove(Isle *isle)
 {
-    root = remove((root), isle);
+    if (root == nullptr)
+    {
+        return;
+    }
+    root = remove(root, isle);
     // you might need to insert some checks / functions here depending on your implementation
 }
 
@@ -232,6 +247,18 @@ void Map::preOrderItemDrop(MapNode *current, int &count)
 {
     // TODO: Drop EINSTEINIUM according to rules
     // Use std::cout << "[Item Drop] " << "EINSTEINIUM dropped on Isle: " << current->isle->getName() << std::endl;
+    if (current == nullptr)
+    {
+        return;
+    }
+    if (count % 5 == 0)
+    {
+        std::cout << "[Item Drop] " << "EINSTEINIUM dropped on Isle: " << current->isle->getName() << std::endl;
+        current->isle->setItem(EINSTEINIUM);
+    }
+    count++;
+    preOrderItemDrop(current->left, count);
+    preOrderItemDrop(current->right, count);
 }
 
 // to Display the values by Post Order Method .. left - right - node
@@ -239,11 +266,43 @@ void Map::postOrderItemDrop(MapNode *current, int &count)
 {
     // TODO: Drop GOLDIUM according to rules
     // Use  std::cout << "[Item Drop] " << "GOLDIUM dropped on Isle: " << current->isle->getName() << std::endl;
+
+    if (current == nullptr)
+    {
+        return;
+    }
+    if (count % 3 == 0)
+    {
+        std::cout << "[Item Drop] " << "GOLDIUM dropped on Isle: " << current->isle->getName() << std::endl;
+        current->isle->setItem(GOLDIUM);
+    }
+    count++;
+    postOrderItemDrop(current->left, count);
+    postOrderItemDrop(current->right, count);
 }
 
 MapNode *Map::findFirstEmptyIsle(MapNode *node)
 {
     // TODO: Find first Isle with no item
+    std::queue<MapNode *> q;
+    q.push(node);
+    while (!q.empty())
+    {
+        MapNode *current = q.front();
+        q.pop();
+        if (current->isle->getItem() == EMPTY)
+        {
+            return current;
+        }
+        if (current->left != nullptr)
+        {
+            q.push(current->left);
+        }
+        if (current->right != nullptr)
+        {
+            q.push(current->right);
+        }
+    }
     return nullptr;
 }
 
@@ -252,6 +311,16 @@ void Map::dropItemBFS()
     // TODO: Drop AMAZONITE according to rules
     // Use std::cout << "[BFS Drop] " << "AMAZONITE dropped on Isle: " << targetNode->isle->getName() << std::endl;
     // Use std::cout << "[BFS Drop] " << "No eligible Isle found for AMAZONITE drop." << std::endl;
+    MapNode *node = findFirstEmptyIsle(root);
+    if (node != nullptr)
+    {
+        std::cout << "[BFS Drop] " << "AMAZONITE dropped on Isle: " << node->isle->getName() << std::endl;
+        node->isle->setItem(AMAZONITE);
+    }
+    else
+    {
+        std::cout << "[BFS Drop] " << "No eligible Isle found for AMAZONITE drop." << std::endl;
+    }
 }
 
 void Map::displayMap()
@@ -322,6 +391,11 @@ int Map::getDepth()
 void Map::populateWithItems()
 {
     // TODO: Distribute fist GOLDIUM than EINSTEINIUM
+
+    int count = 0;
+    postOrderItemDrop(root, count);
+    count = 0;
+    preOrderItemDrop(root, count);
 }
 
 Isle *Map::findIsle(Isle isle)
@@ -453,10 +527,67 @@ void Map::display(MapNode *current, int depth, int state)
 void Map::writeToFile(const std::string &filename)
 {
     // TODO: Write the tree to filename output level by level
+    std::ofstream file(filename);
+    std::queue<MapNode *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        int size = q.size();
+        for (int i = 0; i < size; i++)
+        {
+            MapNode *current = q.front();
+            q.pop();
+            file << current->isle->getName() << " ";
+            if (current->left != nullptr)
+            {
+                q.push(current->left);
+            }
+            if (current->right != nullptr)
+            {
+                q.push(current->right);
+            }
+        }
+        file << std::endl;
+    }
 }
 
 void Map::writeIslesToFile(const std::string &filename)
 {
     // TODO: Write Isles to output file in alphabetical order
     // Use std::cout << "[Output] " << "Isles have been written to " << filename << " in in alphabetical order." << std::endl;
+    std::ofstream file(filename);
+    std::vector<Isle *> isles;
+
+    // Traverse the tree in order and add to vector
+    isles = inOrderTraversal(root);
+
+    for (Isle *isle : isles)
+    {
+        file << isle->getName() << std::endl;
+    }
+    std::cout << "[Output] " << "Isles have been written to " << filename << " in in alphabetical order." << std::endl;
+}
+
+std::vector<Isle *> Map::inOrderTraversal(MapNode *current)
+{
+    if (current == nullptr)
+    {
+        return {};
+    }
+    std::vector<Isle *> isles;
+    std::stack<MapNode *> s;
+    MapNode *temp = current;
+    while (temp != nullptr || !s.empty())
+    {
+        while (temp != nullptr)
+        {
+            s.push(temp);
+            temp = temp->left;
+        }
+        temp = s.top();
+        s.pop();
+        isles.push_back(temp->isle);
+        temp = temp->right;
+    }
+    return isles;
 }

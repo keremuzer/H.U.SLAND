@@ -82,6 +82,9 @@ public:
     void writeToFile(const std::string &filename);
     // Write current Isles to file in alphabetical order
     void writeIslesToFile(const std::string &filename);
+    std::vector<Isle *> inOrderTraversal(MapNode *current);
+
+    int rebalanceCount = 0;
 };
 
 #endif

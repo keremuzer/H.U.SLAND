@@ -16,7 +16,7 @@ protected:
     // Helper function for safe index checking
     bool isValidIndex(int index);
 
-    //Change places of two shapers depending on duel resuls
+    // Change places of two shapers depending on duel resuls
     void replace(RealmShaper *player_low, RealmShaper *player_high);
 
 public:
@@ -50,7 +50,7 @@ public:
     std::vector<std::string> preOrderTraversal(int index);
     std::vector<std::string> postOrderTraversal(int index);
     void breadthFirstTraversal(std::ofstream &outFile);
-    
+
     // Terminal and file outputs
     void displayTree();
     void printTree(int index, int level, const std::string &prefix);

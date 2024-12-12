@@ -29,6 +29,14 @@ bool Isle::increaseShaperCount()
 
     // TODO: Increase shaperCount if necessary
     // return isFull, True if capacity is exceded, false otherwise
+    if (shaperCount < capacity)
+    {
+        shaperCount++;
+    }
+    if (shaperCount >= capacity)
+    {
+        isFull = true;
+    }
 
     return isFull;
 }
@@ -39,6 +47,14 @@ bool Isle::decreaseShaperCount()
 
     // TODO: Decrease shaperCount if necessary
     // return isEmpty, True if shaper count less and equal to 0, false otherwise
+    if (shaperCount > 0)
+    {
+        shaperCount--;
+    }
+    if (shaperCount > 0)
+    {
+        isEmpty = false;
+    }
 
     return isEmpty;
 }
@@ -71,11 +87,9 @@ std::vector<Isle *> Isle::readFromFile(const std::string &filename)
     // Input format: isleName
     std::ifstream file(filename);
     std::string line;
-    Isle *temp;
     while (std::getline(file, line))
     {
-        temp = new Isle(line);
-        isles.push_back(temp);
+        isles.push_back(new Isle(line));
     }
     return isles;
 }

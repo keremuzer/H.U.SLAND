@@ -29,7 +29,18 @@ int main(int argc, char **argv)
     std::vector<RealmShaper *> players = RealmShaper::readFromFile(playersFile);
     GameWorld gameWorld = GameWorld();
     gameWorld.initializeGame(places, players);
-    // gameWorld.getShaperTree().displayTree();
+    gameWorld.getShaperTree().displayTree();
+    gameWorld.getMapTree().displayMap();
+
+    // MapTree deletion test
+    /*std::cout << "Removing " << places[0]->getName() << std::endl;
+    gameWorld.getMapTree().remove(places[0]);
+    gameWorld.getMapTree().displayMap();
+
+    std::cout << "Removing " << places[4]->getName() << std::endl;
+    gameWorld.getMapTree().remove(places[4]);
+    gameWorld.getMapTree().displayMap();*/
+
     gameWorld.displayGameState();
     gameWorld.processGameEvents(argv[3], argv[4]);
     gameWorld.saveGameState(argv[5], argv[6], argv[7], argv[8]);
