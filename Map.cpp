@@ -80,7 +80,7 @@ MapNode *Map::rotateLeft(MapNode *current)
     return temp;
 }
 
-int calculateMinMapDepthAccess(int playerDepth, int totalShaperTreeHeight, int totalMapDepth)
+int Map::calculateMinMapDepthAccess(int playerDepth, int totalShaperTreeHeight, int totalMapDepth)
 {
     return (int)totalMapDepth * ((double)playerDepth / totalShaperTreeHeight);
 }
@@ -154,7 +154,7 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
     // Use std::cout << "[Remove] " << "Tree is Empty" << std::endl;
     if (node == nullptr)
     {
-        std::cerr << "[Remove] Error: Tree is Empty or Node not found." << std::endl;
+        std::cout << "[Remove] " << "Tree is Empty" << std::endl;
         return node;
     }
 
@@ -250,10 +250,8 @@ void Map::remove(Isle *isle)
 {
     if (root == nullptr)
     {
-        std::cerr << "[Remove] Error: Tree is empty." << std::endl;
         return;
     }
-    std::cerr << "[Remove] Starting removal for Isle: " << isle->getName() << std::endl;
     root = remove(root, isle);
     // you might need to insert some checks / functions here depending on your implementation
 }

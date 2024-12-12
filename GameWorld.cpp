@@ -26,6 +26,22 @@ bool GameWorld::hasAccess(RealmShaper *realmShaper, Isle *isle)
     // Use mapTree.calculateMinMapDepthAccess
     // Use // std::cout << "[Access Control] " << "RealmShaper not found!" << std::endl;
 
+    RealmShaper *shaper = shaperTree.findPlayer(realmShaper->getName());
+    if (shaper == nullptr)
+    {
+        std::cout << "[Access Control] " << "RealmShaper not found!" << std::endl;
+        return hasAccess;
+    }
+
+    int playerDepth = shaperTree.getDepth(shaper);
+    int totalHeight = shaperTree.getDepth();
+    int totalMapDepth = mapTree.getDepth();
+    int minMapDepthAccess = mapTree.calculateMinMapDepthAccess(playerDepth, totalHeight, totalMapDepth);
+    if (mapTree.getIsleDepth(isle) >= minMapDepthAccess)
+    {
+        hasAccess = true;
+    }
+
     return hasAccess;
 }
 
@@ -66,6 +82,35 @@ void GameWorld::displayGameState()
 }
 
 // TODO: Implement functions to read and parse Access and Duel logs
+std::vector<std::pair<std::string, std::string>> GameWorld::readAccessLogs(const std::string &accessLogs)
+{
+    std::vector<std::pair<std::string, std::string>> logs;
+    std::ifstream file(accessLogs);
+    std::string line;
+    while (std::getline(file, line))
+    {
+        std::istringstream ss(line);
+        std::string player, isle;
+        ss >> player >> isle;
+        logs.push_back({player, isle});
+    }
+    return logs;
+}
+
+std::vector<std::pair<std::string, std::string>> GameWorld::readDuelLogs(const std::string &duelLogs)
+{
+    std::vector<std::pair<std::string, std::string>> logs;
+    std::ifstream file(duelLogs);
+    std::string line;
+    while (std::getline(file, line))
+    {
+        std::istringstream ss(line);
+        std::string player1, player2;
+        ss >> player1 >> player2;
+        logs.push_back({player1, player2});
+    }
+    return logs;
+}
 
 void GameWorld::processGameEvents(const std::string &accessLogs, const std::string &duelLogs)
 {

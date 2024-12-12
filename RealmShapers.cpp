@@ -53,15 +53,21 @@ void ShaperTree::insert(RealmShaper *shaper)
     // TODO: Insert shaper to the tree
     // find the correct position for the new shaper
     realmShapers.push_back(shaper);
-    /*int index;
-    for (index = 0; index < int(realmShapers.size()); index++)
+    /*if (realmShapers.size() == 1)
     {
-        if (realmShapers[index]->getHonour() < shaper->getHonour())
+        return;
+    }
+    for (int i = realmShapers.size() - 1; i > 0; i--)
+    {
+        if (realmShapers[i]->getHonour() > realmShapers[i - 1]->getHonour())
+        {
+            std::swap(realmShapers[i], realmShapers[i - 1]);
+        }
+        else
         {
             break;
         }
-    }
-    realmShapers.insert(realmShapers.begin() + index, shaper);*/
+    }*/
 }
 
 int ShaperTree::remove(RealmShaper *shaper)

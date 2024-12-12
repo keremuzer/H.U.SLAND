@@ -35,11 +35,11 @@ int main(int argc, char **argv)
     // MapTree deletion test
     std::cout << "Removing " << places[0]->getName() << std::endl;
     gameWorld.getMapTree().remove(places[0]);
-    // gameWorld.getMapTree().displayMap();
+    gameWorld.getMapTree().displayMap();
 
     std::cout << "Removing " << places[4]->getName() << std::endl;
     gameWorld.getMapTree().remove(places[4]);
-    // gameWorld.getMapTree().displayMap();
+    gameWorld.getMapTree().displayMap();
 
     gameWorld.displayGameState();
     gameWorld.processGameEvents(argv[3], argv[4]);
