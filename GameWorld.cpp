@@ -32,12 +32,12 @@ bool GameWorld::hasAccess(RealmShaper *realmShaper, Isle *isle)
         std::cout << "[Access Control] " << "RealmShaper not found!" << std::endl;
         return hasAccess;
     }
-
     int playerDepth = shaperTree.getDepth(shaper);
     int totalHeight = shaperTree.getDepth();
     int totalMapDepth = mapTree.getDepth();
     int minMapDepthAccess = mapTree.calculateMinMapDepthAccess(playerDepth, totalHeight, totalMapDepth);
-    if (mapTree.getIsleDepth(isle) >= minMapDepthAccess)
+    int isleDepth = mapTree.getIsleDepth(isle);
+    if (isleDepth >= minMapDepthAccess)
     {
         hasAccess = true;
     }
@@ -65,6 +65,20 @@ void GameWorld::exploreArea(RealmShaper *realmShaper, Isle *isle)
     // Use shaperCount, but that alone will not be enough,
     // you will likely need to add attributes that are not currently defined
     // to RealmShaper or Isle or other classes depending on your implementation
+    if (!hasAccess(realmShaper, isle))
+    {
+        std::cout << "[Explore Area] " << realmShaper->getName() << " does not have access to explore area " << *isle << std::endl;
+        return;
+    }
+    if (isle->increaseShaperCount())
+    {
+        std::cout << "[Owercrowding] " << isle->getName() << " self-destructed, it will be removed from the map" << std::endl;
+        mapTree.remove(isle);
+        return;
+    }
+    std::cout << "[Explore Area] " << realmShaper->getName() << " visited " << isle->getName() << std::endl;
+    realmShaper->collectItem(isle->getItem());
+    std::cout << "[Energy] " << realmShaper->getName() << "'s new energy level is " << realmShaper->getEnergyLevel() << std::endl;
 }
 
 void GameWorld::craft(RealmShaper *shaper, const std::string &isleName)
@@ -73,6 +87,18 @@ void GameWorld::craft(RealmShaper *shaper, const std::string &isleName)
     // Use std::cout << "[Energy] " << shaperName << " has enough energy points: " << shaperEnergyLevel << std::endl;
     // Use std::cout << "[Craft] " << shaperName << " crafted new Isle " << isleName << std::endl;
     // Use std::cout << "[Energy] " << shaperName << " does not have enough energy points: " << shaperEnergyLevel << std::endl;
+    if (shaper->hasEnoughEnergy())
+    {
+        std::cout << "[Energy] " << shaper->getName() << " has enough energy points: " << shaper->getEnergyLevel() << std::endl;
+        Isle *isle = new Isle(isleName);
+        mapTree.insert(isle);
+        shaper->loseEnergy();
+        std::cout << "[Craft] " << shaper->getName() << " crafted new Isle " << isleName << std::endl;
+    }
+    else
+    {
+        std::cout << "[Energy] " << shaper->getName() << " does not have enough energy points: " << shaper->getEnergyLevel() << std::endl;
+    }
 }
 
 void GameWorld::displayGameState()
@@ -87,6 +113,7 @@ std::vector<std::pair<std::string, std::string>> GameWorld::readAccessLogs(const
     std::vector<std::pair<std::string, std::string>> logs;
     std::ifstream file(accessLogs);
     std::string line;
+    std::getline(file, line);
     while (std::getline(file, line))
     {
         std::istringstream ss(line);
@@ -102,6 +129,7 @@ std::vector<std::pair<std::string, std::string>> GameWorld::readDuelLogs(const s
     std::vector<std::pair<std::string, std::string>> logs;
     std::ifstream file(duelLogs);
     std::string line;
+    std::getline(file, line);
     while (std::getline(file, line))
     {
         std::istringstream ss(line);
@@ -122,6 +150,36 @@ void GameWorld::processGameEvents(const std::string &accessLogs, const std::stri
     // This function should call exploreArea and craft functions
 
     // Use displayGameState();
+    std::vector<std::pair<std::string, std::string>> access = readAccessLogs(accessLogs);
+    std::vector<std::pair<std::string, std::string>> duel = readDuelLogs(duelLogs);
+    size_t duelIndex = 0;
+    for (size_t i = 0; i < access.size(); i++)
+    {
+        if (mapTree.findIsle(access[i].second))
+        {
+            exploreArea(shaperTree.findPlayer(access[i].first), mapTree.findIsle(access[i].second));
+        }
+        else
+        {
+            craft(shaperTree.findPlayer(access[i].first), access[i].second);
+            // exploreArea(shaperTree.findPlayer(access[i].first), mapTree.findIsle(access[i].second));
+        }
+        if ((i + 1) % 5 == 0 && duelIndex < duel.size() && i != 0)
+        {
+            bool result = true ? duel[duelIndex].second == "1" : false;
+            shaperTree.duel(shaperTree.findPlayer(duel[duelIndex].first), result);
+            duelIndex++;
+        }
+    }
+    if (duel.size() > access.size())
+    {
+        for (size_t i = access.size(); i < duel.size(); i++)
+        {
+            bool result = duel[i].second == "1";
+            shaperTree.duel(shaperTree.findPlayer(duel[i].first), result);
+        }
+    }
+    displayGameState();
 }
 
 void GameWorld::saveGameState(const std::string &currentIsles, const std::string &currentWorld, const std::string &currentShapers, const std::string &currentPlayerTree)

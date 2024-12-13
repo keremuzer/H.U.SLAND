@@ -1,10 +1,10 @@
 Player1
-Player2
 Player4
+Player2
 Player8
 Player9
-Player5
 Player10
+Player5
 Player11
 Player3
 Player6

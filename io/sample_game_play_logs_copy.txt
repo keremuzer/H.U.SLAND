@@ -1,0 +1,77 @@
+[Item Drop] GOLDIUM dropped on Isle: Couryonne
+[Item Drop] GOLDIUM dropped on Isle: Elderpond
+[Item Drop] GOLDIUM dropped on Isle: Steepgulch
+[Item Drop] GOLDIUM dropped on Isle: Windvein
+[Item Drop] GOLDIUM dropped on Isle: Maplegrove
+[Item Drop] EINSTEINIUM dropped on Isle: Barcergos
+[Item Drop] EINSTEINIUM dropped on Isle: Orisca
+[Item Drop] EINSTEINIUM dropped on Isle: Windvein
+[Explore Area] Player1 visited Couryonne
+[Energy] Player1's new energy level is 250
+[Explore Area] Player2 visited Coloris
+[Energy] Player2's new energy level is 0
+[Explore Area] Player3 visited Orisca
+[Energy] Player3's new energy level is 2000
+[Explore Area] Player4 visited Barcergos
+[Energy] Player4's new energy level is 2000
+[Explore Area] Player5 visited Windvein
+[Energy] Player5's new energy level is 2000
+[Duel] Player10 won the duel
+[Honour] New honour points: Player10-1150 Player5-1250
+[Explore Area] Player6 visited Tarbella
+[Energy] Player6's new energy level is 0
+[Explore Area] Player7 visited Barcergos
+[Energy] Player7's new energy level is 2000
+[Explore Area] Player8 does not have access to explore area Orisca
+[Explore Area] Player1 visited Windvein
+[Energy] Player1's new energy level is 2250
+[Energy] Player2 does not have enough energy points: 0
+[Duel] Player4 won the duel
+[Honour] New honour points: Player4-1550 Player2-1250
+[Explore Area] Player3 visited Orisca
+[Energy] Player3's new energy level is 4000
+[Explore Area] Player4 visited Tarbella
+[Energy] Player4's new energy level is 2000
+[Explore Area] Player4 visited Barcergos
+[Energy] Player4's new energy level is 4000
+[Explore Area] Player5 visited Barcergos
+[Energy] Player5's new energy level is 4000
+[Explore Area] Player6 visited Barcergos
+[Energy] Player6's new energy level is 2000
+[Honour] New honour points: Player10-1000 Player4-1700
+[Explore Area] Player10 visited Barcergos
+[Energy] Player10's new energy level is 2000
+[Explore Area] Player8 visited Barcergos
+[Energy] Player8's new energy level is 2000
+[Explore Area] Player9 visited Barcergos
+[Energy] Player9's new energy level is 2000
+[Explore Area] Player3 visited Barcergos
+[Energy] Player3's new energy level is 6000
+[Owercrowding] Barcergos self-destructed, it will be removed from the map
+[Honour] New honour points: Player10-850 Player4-1850
+[Energy] Player1 has enough energy points: 2250
+[Craft] Player1 crafted new Isle Barcergos
+[Explore Area] Player11 visited Barcergos
+[Energy] Player11's new energy level is 0
+[Energy] Player4 has enough energy points: 4000
+[Craft] Player4 crafted new Isle Pearlwater
+[Explore Area] Player4 visited Pearlwater
+[Energy] Player4's new energy level is 2000
+[Energy] Player4 has enough energy points: 2000
+[Craft] Player4 crafted new Isle Ragewharf
+[Honour] New honour points: Player10-700 Player4-2000
+[Energy] Player11 does not have enough energy points: 0
+[Energy] Player4 does not have enough energy points: 0
+[Explore Area] Player11 does not have access to explore area Maplegrove
+[Explore Area] Player8 does not have access to explore area Navalicia
+[Explore Area] Player1 visited Steepgulch
+[Energy] Player1's new energy level is 500
+[Honour] New honour points: Player10-550 Player4-2150
+[Explore Area] Player1 visited Pearlwater
+[Energy] Player1's new energy level is 500
+[Energy] Player1 does not have enough energy points: 500
+[Energy] Player1 does not have enough energy points: 500
+[Energy] Player1 does not have enough energy points: 500
+[Output] Isles have been written to io/current_isles.txt in in alphabetical order.
+[Output] Tree have been written to io/current_shaper_tree.txt in pre-order.
+[Output] Shapers have been written to io/current_realm_shapers.txt according to rankings.

@@ -3,9 +3,13 @@ Barcergos
 Coloris
 Couryonne
 Dawnpeak
+Elderpond
 Levannet
+Maplegrove
 Navalicia
 Orisca
+Pearlwater
+Ragewharf
 Steepgulch
 Stoneshire
 Tarbella

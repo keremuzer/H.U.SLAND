@@ -88,7 +88,11 @@ int Map::calculateMinMapDepthAccess(int playerDepth, int totalShaperTreeHeight, 
 int Map::height(MapNode *node)
 {
     // TODO: Return height of the node
-    return node == nullptr ? 0 : node->height;
+    if (node == nullptr)
+    {
+        return -1;
+    }
+    return node->height;
 }
 
 MapNode *Map::insert(MapNode *node, Isle *isle)
@@ -344,25 +348,27 @@ void Map::displayMap()
 int Map::getDepth(MapNode *node)
 {
     // TODO: Return node depth if found, else
-    MapNode *current = root;
-    std::queue<MapNode *> q;
-    q.push(current);
-    while (!q.empty())
+    if (node == nullptr || root == nullptr)
     {
-        current = q.front();
-        q.pop();
-        if (current->left != nullptr)
-        {
-            q.push(current->left);
-        }
-        if (current->right != nullptr)
-        {
-            q.push(current->right);
-        }
+        return -1;
+    }
+    MapNode *current = root;
+    int depth = 0;
+    while (current != nullptr)
+    {
         if (current->isle->getName() == node->isle->getName())
         {
-            return current->height;
+            return depth;
         }
+        if (node->isle->getName() < current->isle->getName())
+        {
+            current = current->left;
+        }
+        else
+        {
+            current = current->right;
+        }
+        depth++;
     }
     return -1;
 }
@@ -371,25 +377,27 @@ int Map::getDepth(MapNode *node)
 int Map::getIsleDepth(Isle *isle)
 {
     // TODO: Return node depth by isle if found, else
-    MapNode *current = root;
-    std::queue<MapNode *> q;
-    q.push(current);
-    while (!q.empty())
+    if (root == nullptr)
     {
-        current = q.front();
-        q.pop();
-        if (current->left != nullptr)
-        {
-            q.push(current->left);
-        }
-        if (current->right != nullptr)
-        {
-            q.push(current->right);
-        }
+        return -1;
+    }
+    MapNode *current = root;
+    int depth = 0;
+    while (current != nullptr)
+    {
         if (current->isle->getName() == isle->getName())
         {
-            return current->height;
+            return depth;
         }
+        if (isle->getName() < current->isle->getName())
+        {
+            current = current->left;
+        }
+        else
+        {
+            current = current->right;
+        }
+        depth++;
     }
     return -1;
 }
@@ -397,13 +405,12 @@ int Map::getIsleDepth(Isle *isle)
 int Map::getDepth()
 {
     // TODO: Return max|total depth of tree
-    return getDepth(root);
+    return height(root);
 }
 
 void Map::populateWithItems()
 {
     // TODO: Distribute fist GOLDIUM than EINSTEINIUM
-
     int count = 1;
     postOrderItemDrop(root, count);
     count = 1;
@@ -414,23 +421,19 @@ Isle *Map::findIsle(Isle isle)
 {
     // TODO: Find isle by value
     MapNode *current = root;
-    std::queue<MapNode *> q;
-    q.push(current);
-    while (!q.empty())
+    while (current != nullptr)
     {
-        current = q.front();
-        q.pop();
-        if (current->left != nullptr)
-        {
-            q.push(current->left);
-        }
-        if (current->right != nullptr)
-        {
-            q.push(current->right);
-        }
         if (current->isle->getName() == isle.getName())
         {
             return current->isle;
+        }
+        if (isle.getName() < current->isle->getName())
+        {
+            current = current->left;
+        }
+        else
+        {
+            current = current->right;
         }
     }
     return nullptr;
@@ -440,23 +443,19 @@ Isle *Map::findIsle(std::string name)
 {
     // TODO: Find isle by name
     MapNode *current = root;
-    std::queue<MapNode *> q;
-    q.push(current);
-    while (!q.empty())
+    while (current != nullptr)
     {
-        current = q.front();
-        q.pop();
-        if (current->left != nullptr)
-        {
-            q.push(current->left);
-        }
-        if (current->right != nullptr)
-        {
-            q.push(current->right);
-        }
         if (current->isle->getName() == name)
         {
             return current->isle;
+        }
+        if (name < current->isle->getName())
+        {
+            current = current->left;
+        }
+        else
+        {
+            current = current->right;
         }
     }
     return nullptr;
@@ -466,23 +465,19 @@ MapNode *Map::findNode(Isle isle)
 {
     // TODO: Find node by value
     MapNode *current = root;
-    std::queue<MapNode *> q;
-    q.push(current);
-    while (!q.empty())
+    while (current != nullptr)
     {
-        current = q.front();
-        q.pop();
-        if (current->left != nullptr)
-        {
-            q.push(current->left);
-        }
-        if (current->right != nullptr)
-        {
-            q.push(current->right);
-        }
         if (current->isle->getName() == isle.getName())
         {
             return current;
+        }
+        if (isle.getName() < current->isle->getName())
+        {
+            current = current->left;
+        }
+        else
+        {
+            current = current->right;
         }
     }
     return nullptr;
@@ -492,23 +487,19 @@ MapNode *Map::findNode(std::string name)
 {
     // TODO: Find node by name
     MapNode *current = root;
-    std::queue<MapNode *> q;
-    q.push(current);
-    while (!q.empty())
+    while (current != nullptr)
     {
-        current = q.front();
-        q.pop();
-        if (current->left != nullptr)
-        {
-            q.push(current->left);
-        }
-        if (current->right != nullptr)
-        {
-            q.push(current->right);
-        }
         if (current->isle->getName() == name)
         {
             return current;
+        }
+        if (name < current->isle->getName())
+        {
+            current = current->left;
+        }
+        else
+        {
+            current = current->right;
         }
     }
     return nullptr;

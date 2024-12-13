@@ -141,7 +141,7 @@ RealmShaper ShaperTree::duel(RealmShaper *challenger, bool result)
         opponent->gainHonour();
     }
     std::cout << "[Honour] " << "New honour points: ";
-    std::cout << challenger->getName() << "-" << challenger->getHonour() << std::endl;
+    std::cout << challenger->getName() << "-" << challenger->getHonour() << " ";
     std::cout << opponent->getName() << "-" << opponent->getHonour() << std::endl;
     if (challenger->getHonour() <= 0)
     {

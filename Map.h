@@ -15,7 +15,7 @@ struct MapNode
     MapNode *left, *right;
     int height = 0;
 
-    MapNode(Isle *isle) : isle(isle), left(nullptr), right(nullptr), height(1) {}
+    MapNode(Isle *isle) : isle(isle), left(nullptr), right(nullptr), height(0) {}
     ~MapNode()
     {
         // TODO: Free any dynamically allocated memory if necessary
