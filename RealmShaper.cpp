@@ -8,6 +8,7 @@
 RealmShaper::RealmShaper(std::string name, int honour) : name(name)
 {
     this->honour = honour;
+    this->currentIsle = nullptr;
 }
 
 const std::string &RealmShaper::getName() const

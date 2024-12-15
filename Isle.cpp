@@ -29,14 +29,12 @@ bool Isle::increaseShaperCount()
 
     // TODO: Increase shaperCount if necessary
     // return isFull, True if capacity is exceded, false otherwise
-    if (shaperCount < capacity)
-    {
-        shaperCount++;
-    }
-    if (shaperCount >= capacity)
+
+    if (shaperCount > capacity)
     {
         isFull = true;
     }
+    shaperCount++;
 
     return isFull;
 }
@@ -51,7 +49,7 @@ bool Isle::decreaseShaperCount()
     {
         shaperCount--;
     }
-    if (shaperCount > 0)
+    if (shaperCount != 0)
     {
         isEmpty = false;
     }

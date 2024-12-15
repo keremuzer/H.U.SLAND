@@ -33,6 +33,8 @@ public:
 
     // Player parser
     static std::vector<RealmShaper *> readFromFile(const std::string &filename);
+
+    Isle *currentIsle = nullptr; // Current Isle player is on
 };
 
 #endif

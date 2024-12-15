@@ -76,6 +76,12 @@ void GameWorld::exploreArea(RealmShaper *realmShaper, Isle *isle)
         mapTree.remove(isle);
         return;
     }
+    if (realmShaper->currentIsle != nullptr)
+    {
+        realmShaper->currentIsle->decreaseShaperCount();
+    }
+    // realmShaper->currentIsle->decreaseShaperCount();
+    realmShaper->currentIsle = isle;
     std::cout << "[Explore Area] " << realmShaper->getName() << " visited " << isle->getName() << std::endl;
     realmShaper->collectItem(isle->getItem());
     std::cout << "[Energy] " << realmShaper->getName() << "'s new energy level is " << realmShaper->getEnergyLevel() << std::endl;
@@ -162,7 +168,6 @@ void GameWorld::processGameEvents(const std::string &accessLogs, const std::stri
         else
         {
             craft(shaperTree.findPlayer(access[i].first), access[i].second);
-            // exploreArea(shaperTree.findPlayer(access[i].first), mapTree.findIsle(access[i].second));
         }
         if ((i + 1) % 5 == 0 && duelIndex < duel.size() && i != 0)
         {

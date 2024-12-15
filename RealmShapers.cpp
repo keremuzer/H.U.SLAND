@@ -53,21 +53,6 @@ void ShaperTree::insert(RealmShaper *shaper)
     // TODO: Insert shaper to the tree
     // find the correct position for the new shaper
     realmShapers.push_back(shaper);
-    /*if (realmShapers.size() == 1)
-    {
-        return;
-    }
-    for (int i = realmShapers.size() - 1; i > 0; i--)
-    {
-        if (realmShapers[i]->getHonour() > realmShapers[i - 1]->getHonour())
-        {
-            std::swap(realmShapers[i], realmShapers[i - 1]);
-        }
-        else
-        {
-            break;
-        }
-    }*/
 }
 
 int ShaperTree::remove(RealmShaper *shaper)
@@ -134,15 +119,19 @@ RealmShaper ShaperTree::duel(RealmShaper *challenger, bool result)
         opponent->loseHonour();
         replace(challenger, opponent);
         std::cout << "[Duel] " << challenger->getName() << " won the duel" << std::endl;
+        std::cout << "[Honour] " << "New honour points: ";
+        std::cout << challenger->getName() << "-" << challenger->getHonour() << " ";
+        std::cout << opponent->getName() << "-" << opponent->getHonour() << std::endl;
     }
     else
     {
         challenger->loseHonour();
         opponent->gainHonour();
+        std::cout << "[Duel] " << challenger->getName() << " lost the duel" << std::endl;
+        std::cout << "[Honour] " << "New honour points: ";
+        std::cout << challenger->getName() << " - " << challenger->getHonour() << " ";
+        std::cout << opponent->getName() << " - " << opponent->getHonour() << std::endl;
     }
-    std::cout << "[Honour] " << "New honour points: ";
-    std::cout << challenger->getName() << "-" << challenger->getHonour() << " ";
-    std::cout << opponent->getName() << "-" << opponent->getHonour() << std::endl;
     if (challenger->getHonour() <= 0)
     {
         std::cout << "[Duel] " << challenger->getName() << " lost all honour, delete" << std::endl;

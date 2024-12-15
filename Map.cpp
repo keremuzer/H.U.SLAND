@@ -221,28 +221,20 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
     int balance = height(node->left) - height(node->right);
     if (balance > 1 && height(node->left->left) - height(node->left->right) >= 0)
     {
-        rebalanceCount++;
-        dropItemBFS();
         return rotateRight(node);
     }
     if (balance > 1 && height(node->left->left) - height(node->left->right) < 0)
     {
-        rebalanceCount++;
-        dropItemBFS();
         node->left = rotateLeft(node->left);
         return rotateRight(node);
     }
 
     if (balance < -1 && height(node->right->left) - height(node->right->right) <= 0)
     {
-        rebalanceCount++;
-        dropItemBFS();
         return rotateLeft(node);
     }
     if (balance < -1 && height(node->right->left) - height(node->right->right) > 0)
     {
-        rebalanceCount++;
-        dropItemBFS();
         node->right = rotateRight(node->right);
         return rotateLeft(node);
     }
