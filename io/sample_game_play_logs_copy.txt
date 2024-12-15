@@ -56,6 +56,7 @@
 [Energy] Player1's new energy level is 4250
 [Explore Area] Player11 visited Barcergos
 [Energy] Player11's new energy level is 2000
+[Owercrowding] Barcergos self-destructed, it will be removed from the map
 [Energy] Player4 has enough energy points: 4000
 [Craft] Player4 crafted new Isle Pearlwater
 [Explore Area] Player4 visited Pearlwater
@@ -80,7 +81,30 @@
 [Explore Area] Player1 visited Angeldrift
 [Energy] Player1's new energy level is 2500
 [Energy] Player1 has enough energy points: 2500
+[Item Drop] GOLDIUM dropped on Isle: Barcergos
+[Item Drop] GOLDIUM dropped on Isle: Coloris
+[Item Drop] GOLDIUM dropped on Isle: Kinibourg
+[Item Drop] GOLDIUM dropped on Isle: Pearlwater
+[Item Drop] GOLDIUM dropped on Isle: Orisca
+[Item Drop] GOLDIUM dropped on Isle: Tenea
+[Item Drop] EINSTEINIUM dropped on Isle: Angeldrift
+[Item Drop] EINSTEINIUM dropped on Isle: Elderpond
+[Item Drop] EINSTEINIUM dropped on Isle: Ragewharf
+[Item Drop] EINSTEINIUM dropped on Isle: Windvein
+[BFS Drop] AMAZONITE dropped on Isle: Dawnpeak
 [Craft] Player1 crafted new Isle Ambermond
-[Output] Isles have been written to io/current_isles.txt in in alphabetical order.
-[Output] Tree have been written to io/current_shaper_tree.txt in pre-order.
-[Output] Shapers have been written to io/current_realm_shapers.txt according to rankings.
+[Duel] Player10 lost the duel
+[Honour] New honour points: Player10 - 400 Player4 - 2300
+[Duel] Player10 lost the duel
+[Honour] New honour points: Player10 - 250 Player4 - 2450
+[Duel] Player10 lost the duel
+[Honour] New honour points: Player10 - 100 Player4 - 2600
+[Duel] Player10 lost the duel
+[Honour] New honour points: Player10 - -50 Player4 - 2750
+[Duel] Player10 lost all honour, delete
+[Duel] Player8 lost the duel
+[Honour] New honour points: Player8 - 1250 Player3 - 1550
+[Duel] Player4 won the duel
+[Honour] New honour points: Player4-2900 Player1-1250
+[Duel] Player5 won the duel
+[Honour] New honour points: Player5-1400 Player2-1100

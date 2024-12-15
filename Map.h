@@ -85,6 +85,7 @@ public:
     std::vector<Isle *> inOrderTraversal(MapNode *current);
 
     int rebalanceCount = 0;
+    bool initialized = false;
 };
 
 #endif

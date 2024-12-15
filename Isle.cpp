@@ -23,6 +23,11 @@ int Isle::getShaperCount()
     return shaperCount;
 }
 
+int Isle::getCapacity()
+{
+    return capacity;
+}
+
 bool Isle::increaseShaperCount()
 {
     bool isFull = false;
@@ -34,7 +39,10 @@ bool Isle::increaseShaperCount()
     {
         isFull = true;
     }
-    shaperCount++;
+    if (shaperCount <= capacity)
+    {
+        shaperCount++;
+    }
 
     return isFull;
 }

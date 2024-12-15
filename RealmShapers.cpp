@@ -330,7 +330,7 @@ void ShaperTree::writeShapersToFile(const std::string &filename)
 {
     // TODO: Write the shapers to filename output level by level
     // Use std::cout << "[Output] " << "Shapers have been written to " << filename << " according to rankings." << std::endl;
-    std::cout << "[Output] " << "Shapers have been written to " << filename << " according to rankings." << std::endl;
+    // std::cout << "[Output] " << "Shapers have been written to " << filename << " according to rankings." << std::endl;
     std::ofstream file(filename);
     breadthFirstTraversal(file);
 }
@@ -339,7 +339,7 @@ void ShaperTree::writeToFile(const std::string &filename)
 {
     // TODO: Write the tree to filename output pre-order
     // Use std::cout << "[Output] " << "Tree have been written to " << filename << " in pre-order." << std::endl;
-    std::cout << "[Output] " << "Tree have been written to " << filename << " in pre-order." << std::endl;
+    // std::cout << "[Output] " << "Tree have been written to " << filename << " in pre-order." << std::endl;
     std::ofstream file(filename);
     preOrderTraversal(0, file);
 }

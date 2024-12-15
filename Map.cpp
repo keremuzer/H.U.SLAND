@@ -8,12 +8,15 @@ Map::Map()
 Map::~Map()
 {
     // TODO: Free any dynamically allocated memory if necessary
-    MapNode *current = root;
+    if (root == nullptr)
+        return;
+
     std::queue<MapNode *> q;
-    q.push(current);
+    q.push(root);
+
     while (!q.empty())
     {
-        current = q.front();
+        MapNode *current = q.front();
         q.pop();
         if (current->left != nullptr)
         {
@@ -23,7 +26,11 @@ Map::~Map()
         {
             q.push(current->right);
         }
-        delete current->isle;
+        if (current->isle != nullptr)
+        {
+            delete current->isle;
+            current->isle = nullptr;
+        }
         delete current;
     }
     root = nullptr;
@@ -38,6 +45,8 @@ void Map::initializeMap(std::vector<Isle *> isles)
         this->insert(isle);
     }
     populateWithItems();
+    initialized = true;
+    rebalanceCount = 0;
 }
 
 MapNode *Map::rotateRight(MapNode *current)
@@ -123,19 +132,39 @@ MapNode *Map::insert(MapNode *node, Isle *isle)
     int balance = height(node->left) - height(node->right);
     if (balance > 1 && isle->getName() < node->left->isle->getName())
     {
+        rebalanceCount++;
+        if (rebalanceCount % 3 == 0 && initialized)
+        {
+            dropItemBFS();
+        }
         return rotateRight(node);
     }
     if (balance < -1 && isle->getName() > node->right->isle->getName())
     {
+        rebalanceCount++;
+        if (rebalanceCount % 3 == 0 && initialized)
+        {
+            dropItemBFS();
+        }
         return rotateLeft(node);
     }
     if (balance > 1 && isle->getName() > node->left->isle->getName())
     {
+        rebalanceCount++;
+        if (rebalanceCount % 3 == 0 && initialized)
+        {
+            dropItemBFS();
+        }
         node->left = rotateLeft(node->left);
         return rotateRight(node);
     }
     if (balance < -1 && isle->getName() < node->right->isle->getName())
     {
+        rebalanceCount++;
+        if (rebalanceCount % 3 == 0 && initialized)
+        {
+            dropItemBFS();
+        }
         node->right = rotateRight(node->right);
         return rotateLeft(node);
     }
@@ -189,6 +218,7 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
             {
                 temp = node;
                 delete temp->isle;
+                temp->isle = nullptr;
                 node = nullptr;
             }
             else
@@ -221,20 +251,40 @@ MapNode *Map::remove(MapNode *node, Isle *isle)
     int balance = height(node->left) - height(node->right);
     if (balance > 1 && height(node->left->left) - height(node->left->right) >= 0)
     {
+        rebalanceCount++;
+        if (rebalanceCount % 3 == 0 && initialized)
+        {
+            dropItemBFS();
+        }
         return rotateRight(node);
     }
     if (balance > 1 && height(node->left->left) - height(node->left->right) < 0)
     {
+        rebalanceCount++;
+        if (rebalanceCount % 3 == 0 && initialized)
+        {
+            dropItemBFS();
+        }
         node->left = rotateLeft(node->left);
         return rotateRight(node);
     }
 
     if (balance < -1 && height(node->right->left) - height(node->right->right) <= 0)
     {
+        rebalanceCount++;
+        if (rebalanceCount % 3 == 0 && initialized)
+        {
+            dropItemBFS();
+        }
         return rotateLeft(node);
     }
     if (balance < -1 && height(node->right->left) - height(node->right->right) > 0)
     {
+        rebalanceCount++;
+        if (rebalanceCount % 3 == 0 && initialized)
+        {
+            dropItemBFS();
+        }
         node->right = rotateRight(node->right);
         return rotateLeft(node);
     }
@@ -319,6 +369,7 @@ void Map::dropItemBFS()
     // TODO: Drop AMAZONITE according to rules
     // Use std::cout << "[BFS Drop] " << "AMAZONITE dropped on Isle: " << targetNode->isle->getName() << std::endl;
     // Use std::cout << "[BFS Drop] " << "No eligible Isle found for AMAZONITE drop." << std::endl;
+    populateWithItems();
     MapNode *node = findFirstEmptyIsle(root);
     if (node != nullptr)
     {
@@ -560,7 +611,7 @@ void Map::writeIslesToFile(const std::string &filename)
     {
         file << isle->getName() << std::endl;
     }
-    std::cout << "[Output] " << "Isles have been written to " << filename << " in in alphabetical order." << std::endl;
+    // std::cout << "[Output] " << "Isles have been written to " << filename << " in in alphabetical order." << std::endl;
 }
 
 std::vector<Isle *> Map::inOrderTraversal(MapNode *current)

@@ -70,21 +70,25 @@ void GameWorld::exploreArea(RealmShaper *realmShaper, Isle *isle)
         std::cout << "[Explore Area] " << realmShaper->getName() << " does not have access to explore area " << *isle << std::endl;
         return;
     }
-    if (isle->increaseShaperCount())
-    {
-        std::cout << "[Owercrowding] " << isle->getName() << " self-destructed, it will be removed from the map" << std::endl;
-        mapTree.remove(isle);
-        return;
-    }
     if (realmShaper->currentIsle != nullptr)
     {
         realmShaper->currentIsle->decreaseShaperCount();
     }
-    // realmShaper->currentIsle->decreaseShaperCount();
     realmShaper->currentIsle = isle;
     std::cout << "[Explore Area] " << realmShaper->getName() << " visited " << isle->getName() << std::endl;
     realmShaper->collectItem(isle->getItem());
     std::cout << "[Energy] " << realmShaper->getName() << "'s new energy level is " << realmShaper->getEnergyLevel() << std::endl;
+
+    isle->increaseShaperCount();
+    if (isle->getShaperCount() > isle->getCapacity())
+    {
+        std::cout << "[Owercrowding] " << isle->getName() << " self-destructed, it will be removed from the map" << std::endl;
+        realmShaper->currentIsle = nullptr;
+        if (isle)
+        {
+            // mapTree.remove(isle);
+        }
+    }
 }
 
 void GameWorld::craft(RealmShaper *shaper, const std::string &isleName)
@@ -176,14 +180,19 @@ void GameWorld::processGameEvents(const std::string &accessLogs, const std::stri
             duelIndex++;
         }
     }
-    if (duel.size() > access.size())
+
+    while (duelIndex < duel.size())
     {
-        for (size_t i = access.size(); i < duel.size(); i++)
+        bool result = (duel[duelIndex].second == "1");
+        auto player = shaperTree.findPlayer(duel[duelIndex].first);
+
+        if (player)
         {
-            bool result = duel[i].second == "1";
-            shaperTree.duel(shaperTree.findPlayer(duel[i].first), result);
+            shaperTree.duel(player, result);
         }
+        duelIndex++;
     }
+
     displayGameState();
 }
 

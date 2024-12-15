@@ -36,6 +36,7 @@ public:
   int getShaperCount();
   bool increaseShaperCount();
   bool decreaseShaperCount();
+  int getCapacity();
 
   // Overloaded operators
   bool operator==(const Isle &other) const;
